@@ -1,0 +1,56 @@
+<?php
+// module/Album/view/album/album/add.phtml:
+
+/*
+We display a title as before, and then we render the form. zend-form provides several view helpers to make this a little easier. The form() view helper has an openTag() and closeTag() method which we use to open and close the form. Then for each element with a label, we can use formRow() to render the label, input, and any validation error messages; for the two elements that are standalone and have no validation rules, we use formHidden() and formSubmit().
+
+Alternatively, the process of rendering the form can be simplified by using the bundled formCollection view helper. For example, in the view script above replace all the form-rendering echo statements with:
+
+echo $this->formCollection($form);
+
+This will iterate over the form structure, calling the appropriate label, element, and error view helpers for each element, but you still have to wrap formCollection($form) with the open and close form tags. This helps reduce the complexity of your view script in situations where the default HTML rendering of the form is acceptable.
+*/
+$title = 'Add new album';
+$this->headTitle($title);
+?>
+<h1><?= $this->escapeHtml($title) ?></h1>
+<?php
+// This provides a default CSS class and placeholder text for the title element:
+$album = $form->get('title');
+$album->setAttribute('class', 'form-control');
+$album->setAttribute('placeholder', 'Album title');
+
+// This provides a default CSS class and placeholder text for the artist element:
+$artist = $form->get('artist');
+$artist->setAttribute('class', 'form-control');
+$artist->setAttribute('placeholder', 'Artist');
+
+// This provides CSS classes for the submit button:
+$submit = $form->get('submit');
+$submit->setAttribute('class', 'btn btn-primary');
+
+$form->setAttribute('action', $this->url('album', ['action' => 'add']));
+$form->prepare();
+
+/*openTag and closeTag for form used here*/
+echo $this->form()->openTag($form);
+?>
+
+<?php // Wrap the elements in divs marked as form groups, and render the
+      // label, element, and errors separately within ?>
+<div class="form-group">
+    <?= $this->formLabel($album) ?>
+    <?= $this->formElement($album) ?>
+    <?= $this->formElementErrors()->render($album, ['class' => 'help-block']) ?>
+</div>
+
+<div class="form-group">
+    <?= $this->formLabel($artist) ?>
+    <?= $this->formElement($artist) ?>
+    <?= $this->formElementErrors()->render($artist, ['class' => 'help-block']) ?>
+</div>
+
+<?php
+echo $this->formSubmit($submit);
+echo $this->formHidden($form->get('id'));
+echo $this->form()->closeTag();
