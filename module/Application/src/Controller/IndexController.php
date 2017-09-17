@@ -18,5 +18,6 @@ class IndexController extends AbstractActionController
         return new ViewModel();
         // can also do this
         // return array('data' => $data);
+        // do something else
     }
 }
